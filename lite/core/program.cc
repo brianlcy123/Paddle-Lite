@@ -596,6 +596,11 @@ void RuntimeProgram::Run() {
   int idx = -1;
 
   auto& insts = instructions_[kRootBlockIdx];
+#ifdef LITE_WITH_PROFILE
+    std::chrono::time_point<std::chrono::system_clock>start_ = std::chrono::system_clock::now();
+    std::chrono::time_point<std::chrono::system_clock>iter_start_ = std::chrono::system_clock::now();
+    std::chrono::time_point<std::chrono::system_clock>iter_end_ = std::chrono::system_clock::now();
+#endif
   for (auto& inst : insts) {
     ++idx;
 #if !defined(LITE_WITH_METAL)
@@ -614,17 +619,33 @@ void RuntimeProgram::Run() {
           inst_precision_profiler.GetInstPrecision(&inst);
     }
 #endif  // LITE_WITH_PRECISION_PROFILE
+#ifdef LITE_WITH_PROFILE
+    iter_end_ = std::chrono::system_clock::now();
+    auto ti = std::chrono::duration_cast<std::chrono::microseconds>(iter_end_ -
+                                                                iter_start_);
+    float iter_elapse_ms = 1000.f * static_cast<float>(ti.count()) *
+                      std::chrono::microseconds::period::num /
+                      std::chrono::microseconds::period::den;
+    iter_start_ = iter_end_;
+    LOG(INFO) << "\n" <<  "RuntimeProgram " << inst << " time cost(ms): " << iter_elapse_ms;
+#endif
   }
-
+  
 #ifdef LITE_WITH_METAL
   if (metal_ctx_) {
     MetalContext* wait_ctx = (*metal_ctx_).As<MTLContext>().context();
     wait_ctx->wait_all_completed();
-  }
+}
 #endif
 
 #ifdef LITE_WITH_PROFILE
-  LOG(INFO) << "\n" << profiler_.Summary(profile::Type::kDispatch, false, 1);
+  // LOG(INFO) << "\n" << profiler_.Summary(profile::Type::kDispatch, false, 1);
+  std::chrono::time_point<std::chrono::system_clock>end_  = std::chrono::system_clock::now();
+  auto ts_elapse = std::chrono::duration_cast<std::chrono::microseconds>(end_ - start_);
+  float total_elapse_ms = 1000.f * static_cast<float>(ts_elapse.count()) *
+                    std::chrono::microseconds::period::num /
+                    std::chrono::microseconds::period::den;
+  LOG(INFO) << "\n" <<  "RuntimeProgram Run time cost(ms): " << total_elapse_ms;
 #endif
 #ifdef LITE_WITH_PRECISION_PROFILE
   LOG(INFO) << "\n"

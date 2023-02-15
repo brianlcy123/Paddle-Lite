@@ -99,7 +99,18 @@ class TargetWrapper<TARGET(kXPU)> {
       xpu_runtime_ptr->xpu_tls_raw_ctx->GetXDNNContext()->set_nsdnn(
           xpu_runtime_ptr->xpu_sdnn_num);
     }
+    
+    if (GetIntFromEnv("XPU_SDNN_NUM") > 0) {
+      xpu_runtime_ptr->xpu_tls_raw_ctx->GetXDNNContext()->set_nsdnn(
+          GetIntFromEnv("XPU_SDNN_NUM"));
+      VLOG(2) << "Set XPU_SDNN_NUM:" << GetIntFromEnv("XPU_SDNN_NUM");
+    }
 
+    if (GetIntFromEnv("XPU_SCLUSTER_NUM") > 0) {
+      xpu_runtime_ptr->xpu_tls_raw_ctx->GetXDNNContext()->set_ncluster(
+          GetIntFromEnv("XPU_SCLUSTER_NUM"));
+      VLOG(2) << "Set XPU_SCLUSTER_NUM:" << GetIntFromEnv("XPU_SCLUSTER_NUM");
+    }
     if (!xpu_runtime_ptr->xpu_enable_multi_stream) {
       VLOG(3) << "all threads share the default xpu stream";
     } else {

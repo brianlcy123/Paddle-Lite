@@ -5,6 +5,7 @@ set -e
 # 1. global variables, you can change them according to your requirements
 #####################################################################################################
 # armv8 or armv7hf or armv7 or x86, default armv8.
+export PATH=/home/disk1/liuchengyao/tools/cmake-3.15.3-Linux-x86_64/bin:$PATH
 ARCH=armv8
 # gcc or clang, default gcc.
 TOOLCHAIN=gcc
@@ -91,7 +92,7 @@ WITH_PRECISION_PROFILE=OFF
 # option of benchmark, default is OFF
 WITH_BENCHMARK=OFF
 # num of threads used during compiling..
-readonly NUM_PROC=${LITE_BUILD_THREADS:-4}
+readonly NUM_PROC=${LITE_BUILD_THREADS:-16}
 #####################################################################################################
 
 
