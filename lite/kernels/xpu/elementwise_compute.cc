@@ -174,6 +174,11 @@ void ElementwiseCompute<T, Functor, PType>::Run() {
     for (size_t i = 0; i < x_dim.size(); i++) {
       x_shape[i] = static_cast<int>(x_dim[i]);
       y_shape[i] = static_cast<int>(y_dim[i]);
+      if(!(x_shape[i] == y_shape[i] || x_shape[i] == 1 || y_shape[i] == 1)) {
+        for(size_t j=0; j < x_dim.size(); j++) {
+            LOG(FATAL) << "\nx_shape[" << j << "]: " << x_shape[j] <<", y_shape[" << j << "]: " << y_shape[j];
+        }
+      }
       CHECK_EQ((x_shape[i] == y_shape[i] || x_shape[i] == 1 || y_shape[i] == 1),
                true);
     }

@@ -31,6 +31,7 @@ int FillConstantCompute::FillConstData() {
   int write_size = param.out->numel();
 
   T value = static_cast<T>(param.value);
+  VLOG(1) << "FillConstant write_size: " << write_size << " value: " << value  << "\n"; 
   if (param.value_tensor) {
     value = param.value_tensor->template mutable_data<T>()[0];
   }

@@ -603,6 +603,7 @@ void RuntimeProgram::Run() {
 #endif
   for (auto& inst : insts) {
     ++idx;
+     //LOG(INFO) << "\n" <<  "Enter Instruction " << inst;
 #if !defined(LITE_WITH_METAL)
     if (inst.is_feed_fetch_op()) continue;
 #endif

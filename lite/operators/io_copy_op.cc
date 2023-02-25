@@ -32,10 +32,13 @@ bool IoCopyOp::CheckShape() const {
 
 bool IoCopyOp::InferShapeImpl() const {
   if (param_.x != nullptr) {
+    VLOG(1) << "IoCopy param_.x->dims: " <<param_.x ->dims() << "\n";
     param_.y->Resize(param_.x->dims());
     param_.y->set_lod(param_.x->lod());
     param_.y->set_precision(param_.x->precision());
     param_.y->set_persistable(param_.x->persistable());
+  } else {
+    VLOG(1) << "IoCopy param_.x == nullptr\n";
   }
   if (param_.x_array != nullptr) {
     param_.y_array->resize(param_.x_array->size());

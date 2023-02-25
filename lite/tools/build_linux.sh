@@ -5,7 +5,7 @@ set -e
 # 1. global variables, you can change them according to your requirements
 #####################################################################################################
 # armv8 or armv7hf or armv7 or x86, default armv8.
-export PATH=/home/disk1/liuchengyao/tools/cmake-3.15.3-Linux-x86_64/bin:$PATH
+export PATH=/home/liuchengyao/paddle_lite_workspace/cmake-3.15.3-Linux-x86_64/bin:$PATH
 ARCH=armv8
 # gcc or clang, default gcc.
 TOOLCHAIN=gcc
@@ -106,7 +106,7 @@ readonly THIRDPARTY_TAR=third-party-651c7c4.tar.gz
 # absolute path of Paddle-Lite.
 readonly workspace=$(dirname $(readlink -f "$0"))/../../
 # basic options for linux compiling.
-readonly CMAKE_COMMON_OPTIONS="-DCMAKE_BUILD_TYPE=Release \
+readonly CMAKE_COMMON_OPTIONS="-DCMAKE_BUILD_TYPE=Debug \
                             -DWITH_MKLDNN=OFF \
                             -DWITH_TESTING=OFF"
 
